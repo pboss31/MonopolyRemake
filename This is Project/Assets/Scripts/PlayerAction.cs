@@ -10,6 +10,7 @@ public class PlayerAction : MonoBehaviour
     PlayerData[] thePlayerData;
     PlayerPiece[] thePlayerPiece;
     BuyMenu buyMenu;
+    UpgradeMenu upgradeMenu;
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +18,7 @@ public class PlayerAction : MonoBehaviour
         chance = GameObject.FindObjectOfType<ChanceData>();
         theStateManager = GameObject.FindObjectOfType<StateManager>();
         buyMenu = GameObject.FindObjectOfType<BuyMenu>();
+        upgradeMenu = GameObject.FindObjectOfType<UpgradeMenu>();
         thePlayerData = GameObject.FindObjectsOfType<PlayerData>().OrderBy(m => m.transform.GetSiblingIndex()).ToArray();
         thePlayerPiece = GameObject.FindObjectsOfType<PlayerPiece>().OrderBy(m => m.transform.GetSiblingIndex()).ToArray();
 
@@ -55,9 +57,8 @@ public class PlayerAction : MonoBehaviour
                 if (theStateManager.PlayerPosition[i] == theStateManager.PlayerPosition[theStateManager.CurrentPlayerId])
                 {
                     //atk the player
-                    //thePlayerData[i].Hp -= thePlayerData[theStateManager.CurrentPlayerId].Atk;
-                    thePlayerData[s
-                    Debug.Log("SAME POSITION!\nthisPos = " + theStateManager.PlayerPosition[theStateManager.CurrentPlayerId] + " enemyPos = " + theStateManager.PlayerPosition[i]);
+                    thePlayerData[i].TakeDamage(thePlayerData[theStateManager.CurrentPlayerId].Atk);
+                    Debug.Log("SAME POSITION!\nthisPos = " + theStateManager.PlayerPosition[theStateManager.CurrentPlayerId] + " enemy" + i + "Pos = " + theStateManager.PlayerPosition[i]);
                 }
             }
         }
@@ -102,35 +103,36 @@ public class PlayerAction : MonoBehaviour
                 //owner = you
                 if (currTile.GetComponent<Building>().Owner == theStateManager.CurrentPlayerId)
                 {
-                    Debug.Log("upgradeble?");
-                    //upgradeable
-                    /*
-                    if(currTile.BasePrice)
-                    //!upgradeable
+                    //house already at max level
+                    if (currTile.GetComponent<Building>().Level == 3) { theStateManager.IsDoneActing = true; return true; }
+                    //enough money
+                    if (thePlayerData[theStateManager.CurrentPlayerId].Coin >= currTile.GetComponent<Building>().UpgradePrice())
+                    {
+                        //open upg menu
+                        upgradeMenu.OpenUpgradeMenu();
+                    }
+                    //not enough money
                     else
                     {
                         Debug.Log("NOT ENOUGH MONEY");
                         theStateManager.IsDoneActing = true;
-                    }*/
+                    }
                 }
                 //owner != you
                 else
                 {
-                    thePlayerData[theStateManager.CurrentPlayerId].Coin -= currTile.GetComponent<Building>().Price;
-                    thePlayerData[currTile.GetComponent<Building>().Owner].Coin += currTile.GetComponent<Building>().Price;
+                    //Pay(Amount, ToWho)
+                    thePlayerData[theStateManager.CurrentPlayerId].Pay(currTile.GetComponent<Building>().Price, thePlayerData[currTile.GetComponent<Building>().Owner]);
+
                     Debug.Log("Player" + theStateManager.CurrentPlayerId + " lost " + currTile.GetComponent<Building>().Price + " coins to Player" + currTile.GetComponent<Building>().Owner);
+
                     //atk the house
-                    currTile.GetComponent<Building>().TakeDamage();
-                    //destroy house if hp <= 0
-                    if (currTile.GetComponent<Building>().Hp <= 0)
-                    {
-                        currTile.transform.GetChild(1).gameObject.SetActive(false);
-                        currTile.GetComponent<Building>().Owner = -1;
-                    }
+                    currTile.GetComponent<Building>().TakeDamage(thePlayerData[theStateManager.CurrentPlayerId].Atk);
+
+                    theStateManager.IsDoneActing = true;
                 }
-                //MIGHT HAVE TO DELETE THIS
-                theStateManager.IsDoneActing = true;
             }
+
             //not built
             else
             {
@@ -149,6 +151,7 @@ public class PlayerAction : MonoBehaviour
 
             return true;
         }
+
         return true;
     }
 }

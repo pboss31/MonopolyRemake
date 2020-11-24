@@ -52,12 +52,16 @@ public class ConnectedTile : MonoBehaviour
                 //  Building script
                 //setting building to false
                 tile[i].transform.GetChild(1).gameObject.SetActive(false);
+                tile[i].transform.GetChild(2).gameObject.SetActive(false);
+                tile[i].transform.GetChild(3).gameObject.SetActive(false);
                 //setting price
                 building[i].Price = tile[i].BasePrice;
                 //setting hp
                 building[i].Hp = tile[i].BaseHp;
                 //setting owner to -1 (NONE)
                 building[i].Owner = -1;
+                //setting level to 1
+                building[i].Level = 1;
             }
         }
     }

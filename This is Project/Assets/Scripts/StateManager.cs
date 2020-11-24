@@ -7,7 +7,7 @@ public class StateManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         PlayerPosition = new int[NumberOfPlayers];
-	}
+    }
 
     public float up1, up2, pay1, pay2, pay3, hp1, hp2, sell;
 
@@ -21,15 +21,15 @@ public class StateManager : MonoBehaviour {
     public bool IsDoneAnimating = false;
     public bool IsBuying = false;
     public bool IsDoneActing = false;
+    public bool IsUpgrading = false;
 
     public void NewTurn()
     {
         // start a next player turn
         IsDoneRolling = false;
         IsDoneAnimating = false;
-        IsBuying = false;
         IsDoneActing = false;
-
+        
         //switch to next player
         CurrentPlayerId = (CurrentPlayerId + 1) % NumberOfPlayers;
     }

@@ -48,9 +48,16 @@ public class PlayerData : MonoBehaviour, ITakeDamage
     public int Coin { get => _coin; set => _coin = value; }
     public string Class { get => _class; set => _class = value; }
 
-    public void TakeDamage()
+    public void TakeDamage(int dmg)
     {
-        //thePlayerData[i].Hp -= thePlayerData[theStateManager.CurrentPlayerId].Atk;
-        //
+        _hp -= dmg;
+    }
+
+    public void Pay(int payAmount, PlayerData player)
+    {
+        //player coin decrease 
+        _coin -= payAmount;
+        //player coin increase
+        player.Coin += payAmount;
     }
 }
