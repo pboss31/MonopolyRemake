@@ -47,29 +47,29 @@ public class HouseInfoMenu : MonoBehaviour
         theStateManager.IsOpeningHouseMenu = true;
         transform.GetChild(0).gameObject.SetActive(true);
 
-        houseName.text = building.GetComponent<Tile>().Name;
-        level.text = "LEVEL" + building.Level.ToString();
-        hp.text = "HP : " + building.Hp.ToString();
+        houseName.text = building.HouseNo + "\n" + building.GetComponent<Tile>().Name;
+        level.text = "LEVEL " + building.Level.ToString();
+        hp.text = "Health " + building.Hp.ToString() + " points";
 
         if(building.Owner == -1)
         {
-            priceToBuy.text = "Buy Price : " + building.Price;
-            priceFall.text = "Fall Price : " + building.FallPrice();
+            priceToBuy.text = "Buy " + building.Price + " coins";
+            priceFall.text = "Rent " + building.FallPrice() + " coins";
             return;
         }
         switch (building.Level)
         {
             case 1:
-                priceToBuy.text = "Up Price : " + building.UpgradePrice();
-                priceFall.text = "Fall Price : " + building.FallPrice();
+                priceToBuy.text = "Upgrade " + building.UpgradePrice() + " coins";
+                priceFall.text = "Rent " + building.FallPrice() + " coins";
                 break;
             case 2:
-                priceToBuy.text = "Up Price : " + building.UpgradePrice();
-                priceFall.text = "Fall Price : " + building.FallPrice();
+                priceToBuy.text = "Upgrade : " + building.UpgradePrice() + " coins";
+                priceFall.text = "Rent " + building.FallPrice() + " coins";
                 break;
             case 3:
-                priceToBuy.text = "Up Price : MAX LVL";
-                priceFall.text = "Fall Price : " + building.FallPrice();
+                priceToBuy.text = "Upgrade : Max Level" + " coins";
+                priceFall.text = "Rent : " + building.FallPrice() + " coins";
                 break;         
         }
     }

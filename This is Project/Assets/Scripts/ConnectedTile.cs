@@ -31,6 +31,7 @@ public class ConnectedTile : MonoBehaviour
             string tileInfo = www.downloadHandler.text;
             //split data to row -> 1 start 0 0 , ....
             string[] row = tileInfo.Split('\n');
+            int houseIndex = 1;
 
             for (int i = 0; i < tile.Length; i++)
             {
@@ -62,6 +63,12 @@ public class ConnectedTile : MonoBehaviour
                 building[i].Owner = -1;
                 //setting level to 1
                 building[i].Level = 1;
+
+                if (building[i].CompareTag("House"))
+                {
+                    building[i].HouseNo = houseIndex;
+                    houseIndex++;
+                }
             }
         }
     }

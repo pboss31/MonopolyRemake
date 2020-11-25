@@ -10,11 +10,13 @@ public class Building : MonoBehaviour, ITakeDamage, IClickable
     [SerializeField] private int _price;
     [SerializeField] private int _hp;
     [SerializeField] private int _level;
+    [SerializeField] private int _houseNo;
 
     public int Owner { get => _owner; set => _owner = value; }
     public int Price { get => _price; set => _price = value; }
     public int Hp { get => _hp; set => _hp = value; }
     public int Level { get => _level; set => _level = value; }
+    public int HouseNo { get => _houseNo; set => _houseNo = value; }
 
     StateManager theStateManager;
     PlayerData[] thePlayerData;
@@ -117,7 +119,7 @@ public class Building : MonoBehaviour, ITakeDamage, IClickable
 
     private void upgradeCalc(float up, float hp, int buildingLvl)
     {
-        //setactive to next level
+        //setactive to next level & deactive old one
         transform.GetChild(_level).gameObject.SetActive(false);
         transform.GetChild(_level + 1).gameObject.SetActive(true);
 
@@ -126,8 +128,8 @@ public class Building : MonoBehaviour, ITakeDamage, IClickable
         //decrease player's coin
         thePlayerData[theStateManager.CurrentPlayerId].Coin -= _price; 
 
-        //hp = Base_hp * 1.2
-        _hp = Mathf.CeilToInt(GetComponent<Tile>().BaseHp * hp); 
+        //hp = hp * hpMult
+        _hp = Mathf.CeilToInt(_hp * hp); 
 
         _level++;
 

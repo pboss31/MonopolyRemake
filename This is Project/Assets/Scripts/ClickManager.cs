@@ -17,7 +17,7 @@ public class ClickManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        //highlight tile
+        //highlight tile   
         if(Physics.Raycast(ray, out hit))
         {
             Transform selection = hit.transform;
@@ -27,12 +27,12 @@ public class ClickManager : MonoBehaviour
                 //if clickable -> open house info menu
                 if (Input.GetMouseButtonDown(0))
                 {
-                    IClickable clickable = selection.parent.GetComponent<Building>();
-                    clickable.OnClick();
+                    IClickable clickable = selection.parent.GetComponent<IClickable>();
+                    if (clickable != null)
+                        clickable.OnClick();
                 }
                 _selection = selection;
-            }
-            
+            }         
         }
     }
 }

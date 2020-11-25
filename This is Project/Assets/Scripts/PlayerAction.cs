@@ -22,7 +22,10 @@ public class PlayerAction : MonoBehaviour
         thePlayerData = GameObject.FindObjectsOfType<PlayerData>().OrderBy(m => m.transform.GetSiblingIndex()).ToArray();
         thePlayerPiece = GameObject.FindObjectsOfType<PlayerPiece>().OrderBy(m => m.transform.GetSiblingIndex()).ToArray();
 
-        
+        foreach (var item in thePlayerData)
+        {
+            Debug.Log(item.name);
+        }
     }
 
     private Tile currTile;
@@ -96,6 +99,7 @@ public class PlayerAction : MonoBehaviour
         else if ("House" == currTile.tag)
         {
             Debug.Log("Player: " + theStateManager.CurrentPlayerId + " landed on " + currTile.tag + " tile");
+
             //built
             if (currTile.transform.GetChild(1).gameObject.activeSelf || currTile.transform.GetChild(2).gameObject.activeSelf || currTile.transform.GetChild(3).gameObject.activeSelf)
             {
@@ -108,7 +112,7 @@ public class PlayerAction : MonoBehaviour
                     //enough money
                     if (thePlayerData[theStateManager.CurrentPlayerId].Coin >= currTile.GetComponent<Building>().UpgradePrice())
                     {
-                        //open upg menu
+                        //open upgrade menu
                         upgradeMenu.OpenUpgradeMenu();
                     }
                     //not enough money
@@ -122,7 +126,7 @@ public class PlayerAction : MonoBehaviour
                 else
                 {
                     //Pay(Amount, ToWho)
-                    thePlayerData[theStateManager.CurrentPlayerId].Pay(currTile.GetComponent<Building>().Price, thePlayerData[currTile.GetComponent<Building>().Owner]);
+                    thePlayerData[theStateManager.CurrentPlayerId].Pay(currTile.GetComponent<Building>().FallPrice(), thePlayerData[currTile.GetComponent<Building>().Owner]);
 
                     Debug.Log("Player" + theStateManager.CurrentPlayerId + " lost " + currTile.GetComponent<Building>().Price + " coins to Player" + currTile.GetComponent<Building>().Owner);
 
