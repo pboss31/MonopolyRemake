@@ -22,6 +22,7 @@ public class StateManager : MonoBehaviour {
     public bool IsBuying = false;
     public bool IsDoneActing = false;
     public bool IsUpgrading = false;
+    public bool IsOpeningHouseMenu = false;
 
     public void NewTurn()
     {

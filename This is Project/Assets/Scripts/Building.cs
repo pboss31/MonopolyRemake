@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class Building : MonoBehaviour, ITakeDamage
+public class Building : MonoBehaviour, ITakeDamage, IClickable
 {
 
     [SerializeField] private int _owner;
@@ -18,11 +18,14 @@ public class Building : MonoBehaviour, ITakeDamage
 
     StateManager theStateManager;
     PlayerData[] thePlayerData;
+    HouseInfoMenu houseMenu;
+    
 
     public void Start()
     {
         theStateManager = GameObject.FindObjectOfType<StateManager>();
         thePlayerData = GameObject.FindObjectsOfType<PlayerData>().OrderBy(m => m.transform.GetSiblingIndex()).ToArray();
+        houseMenu = GameObject.FindObjectOfType<HouseInfoMenu>();
     }
 
     public void Update()
@@ -30,19 +33,32 @@ public class Building : MonoBehaviour, ITakeDamage
         if (_owner == 0)
         {
             transform.GetChild(1).GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+            transform.GetChild(2).GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+            transform.GetChild(3).GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         }
         else if (_owner == 1)
         {
             transform.GetChild(1).GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+            transform.GetChild(2).GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+            transform.GetChild(3).GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
         }
         else if (_owner == 2)
         {
             transform.GetChild(1).GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+            transform.GetChild(2).GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+            transform.GetChild(3).GetComponent<Renderer>().material.SetColor("_Color", Color.green);
         }
         else
         {
             transform.GetChild(1).GetComponent<Renderer>().material.SetColor("_Color", Color.yellow);
+            transform.GetChild(2).GetComponent<Renderer>().material.SetColor("_Color", Color.yellow);
+            transform.GetChild(3).GetComponent<Renderer>().material.SetColor("_Color", Color.yellow);
         }
+    }
+
+    public void OnClick()
+    {
+        houseMenu.OpenHouseInfoMenu(this);
     }
 
     public void TakeDamage(int dmg)
@@ -125,8 +141,23 @@ public class Building : MonoBehaviour, ITakeDamage
                 return Mathf.CeilToInt(GetComponent<Tile>().BasePrice * theStateManager.up1);
             case 2:
                 return Mathf.CeilToInt(GetComponent<Tile>().BasePrice * theStateManager.up2);
+            default:
+                return 0;
         }
+    }
 
-        return 0;
+    public int FallPrice()
+    {
+        switch (_level)
+        {
+            case 1: 
+                return Mathf.CeilToInt(_price * theStateManager.pay1);
+            case 2:
+                return Mathf.CeilToInt(_price * theStateManager.pay2);
+            case 3:
+                return Mathf.CeilToInt(_price * theStateManager.pay3);
+            default:
+                return 0;
+        }   
     }
 }
